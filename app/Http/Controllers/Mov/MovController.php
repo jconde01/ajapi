@@ -46,6 +46,7 @@ class MovController extends Controller
      */
     public function store(Request $request)
     {
+        return  response()->json($request->all());
         $movH = new MovHeader();
         DB::transaction(function () use($request,$movH) {
             $folio = Movtos::where('mov_type',$this::REMISION)->first();
