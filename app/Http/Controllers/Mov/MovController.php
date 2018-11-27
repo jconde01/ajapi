@@ -59,7 +59,7 @@ class MovController extends Controller
             //$movH->desc_porc = $request->input->body('descuento_porcentaje_total'); // Manejaremos descuento por renglon
             $email = explode('@', $request->body["comprador"]["email"]);
             $movH->entregado_por = $email[0];
-            $movH->transportado_por = $email[1];
+            //$movH->transportado_por = $email[1];
             $movH->Importe_Total = $request->body['importe_total'];
             $movH->cliente_id = 1;
             if ($request->body['forma_pago'] == 1) {
