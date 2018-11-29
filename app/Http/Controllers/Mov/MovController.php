@@ -62,11 +62,13 @@ class MovController extends Controller
             $movH->entregado_por = $email[0];
             $movH->transportado_por = $email[1];
             $movH->Importe_Total = $request->importe_total;
-            $movH->cliente_id          if ($request->forma_pago == 1) {
+            $movH->cliente_id = 1;
+            if ($request->forma_pago == 1) {
                 $movH->c_FormaPago = "01";              // Efectivo (OXXO)
             } else {
                 $movH->c_FormaPago = "04";              // Tarjeta de crédito, Paypal
-            }                 $movH->save();
+            }
+            $movH->save();
             foreach ($request->productos as $key => $product) {
                  $movD = New MovDetail();
                  $movD->idmov_h = $movH->idmov_h;
