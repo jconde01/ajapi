@@ -103,23 +103,22 @@ class MovController extends Controller
             } catch (Illuminate\Database\Eloquent\ModelNotFoundException $e) {
                 response()->json(['estatus' => 'Error. No pude encontrar la compra relacionada','id_compra' => $id_compra], 500);
             }
-            
+
             // Busca un cliente con el RFC pasado. Si no existe lo agrega a la BD
-            try {
-                $cliente = Client::where('RFC',$request->rfc)->firstOrFail();
-                $cliCon = CliCon::find($cliente->cliente_id);    
-            } catch ( Illuminate\Database\Eloquent\ModelNotFoundException $e ) {
-                // Agrega el cliente a la BD
-                $cliente = New Client();
-                $cliente->Nombre = $request->razon_social;
-                $cliente->RFC = $request->rfc;
-                $cliente->CP = $request->CP;
-                $cliente->c_UsoCFDI = $request->cfdi;
-                $cliente->save();
-                $cliCon = New CliCon();
-                $cliCon->NOMCON = 'contacto 1';
-                $cliCon->EMACON = $compra->entregado_por . '@' . $compra->transportado_por;
-                $cliCon->save();
+            $cliente = Client::where('RFC',$request->input('rfc'))->first();
+
+            if(!$cliente) {
+                 // Agrega el cliente a la BD
+                 $cliente = New Client();
+                 $cliente->Nombre = $request->input('razon_social');
+                 $cliente->RFC = $request->input('rfc');
+                 $cliente->CP = $request->input('CP');
+                 $cliente->c_UsoCFDI = $request->input('cfdi');
+                 $cliente->save();
+                 $cliCon = New CliCon();
+                 $cliCon->NOMCON = 'contacto 1';
+                 $cliCon->EMACON = $compra->entregado_por . '@' . $compra->transportado_por;
+                 $cliCon->save();
             }
 
             // Ya tenemos el cliente y la compra relacionada. 
